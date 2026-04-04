@@ -1,0 +1,29 @@
+# Продакшен-стек: БД из compose.yaml + backend + frontend.
+# Запуск: docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+# Файл compose.override.yaml при этом не подключается (нет Mailpit и проброса 5432 на хост).
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    ports:
+      - "8000:80"
+    environment:
+      APP_ENV: prod
+      APP_SECRET: ${APP_SECRET:-0102030405060708090a0b0c0d0e0f10112131415161718191a1b1c1d1e1f20}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgre}:${POSTGRES_PASSWORD:-postgre}@database:5432/${POSTGRES_DB:-postgre}?serverVersion=16&charset=utf8
+      TELEGRAM_USE_REAL_API: ${TELEGRAM_USE_REAL_API:-false}
+      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:-*}
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend

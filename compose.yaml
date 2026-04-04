@@ -19,6 +19,8 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+  # Backend и frontend в Docker — в compose.prod.yaml (см. корневой README).
+
   # Redis — раскомментируйте сервис и том ниже, когда понадобится кэш/очереди через Redis.
   # Убедитесь, что в .env.local заданы REDIS_URL (или аналог), и при необходимости
   # добавьте секцию ports в compose.override.yaml, например "6379:6379".

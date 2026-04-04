@@ -67,9 +67,10 @@
 
 ## Фаза 6. Docker для приложения
 
-1. Dockerfile для PHP-приложения (расширения для PostgreSQL и Doctrine, установка зависимостей Composer).
-2. Сервис приложения в Compose рядом с БД (расширить существующие файлы или отдельный профиль); зависимость от готовности БД.
-3. В README — команды запуска «только БД» и «приложение + БД».
+1. Отдельные образы: **backend** (Symfony/PHP — расширения для PostgreSQL и Doctrine, установка зависимостей Composer) и **frontend** (сборка Vite/React и раздача статики, например nginx).
+2. В Compose — сервисы `database`, backend и frontend; backend зависит от готовности БД (`depends_on` + `condition: service_healthy`); прокси/API base URL / CORS настроены так, чтобы UI из контейнера стучался в API.
+3. Продакшен: **одна команда** `docker compose -f compose.yaml -f compose.prod.yaml up -d --build` (`compose.prod.yaml`). Разработка: `docker compose up -d` — БД и override (Mailpit, порт 5432), приложение на хосте.
+4. Команды dev и prod — в корневом README и в [README.md](./README.md) каталога `doc/`.
 
 ---
 

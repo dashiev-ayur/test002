@@ -1,8 +1,8 @@
 # Posiflora — MVP интеграции Telegram
 
-Backend на Symfony 8 и фронтенд в **`frontend/`** (Vite + React + TypeScript). Подробные требования и план работ — в каталоге [doc/](doc/).
+Backend на Symfony 8 и фронтенд в `**frontend/**` (Vite + React + TypeScript). Подробные требования и план работ — в каталоге [doc/](doc/).
 
-## Быстрый старт
+## Быстрый старт (разработка)
 
 1. Установить зависимости: `composer install`
 2. Поднять инфраструктуру: `docker compose up -d` (PostgreSQL на порту **5432**, см. [compose.override.yaml](compose.override.yaml))
@@ -10,6 +10,28 @@ Backend на Symfony 8 и фронтенд в **`frontend/`** (Vite + React + Ty
 4. Запуск веб-сервера для разработки: `symfony server:start` (или настройте свой vhost на `public/`).
 
 Расширенные сценарии (Symfony CLI, работа с БД из консоли) описаны в [doc/README.md](doc/README.md).
+
+## Docker: разработка и продакшен
+
+
+| Режим          | Команда                                                             | Что поднимается                                                                                                                                                                                                 |
+| -------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Разработка** | `docker compose up -d`                                              | `compose.yaml` + `**compose.override.yaml`**: PostgreSQL (порт **5432** на хосте), Mailpit. Backend и фронтенд запускаются вручную на машине (Symfony CLI, `npm run dev`).                                      |
+| **Продакшен**  | `docker compose -f compose.yaml -f compose.prod.yaml up -d --build` | Только `**compose.yaml`** и `**compose.prod.yaml`**: PostgreSQL без проброса порта наружу, контейнеры **backend** и **frontend**. Порты приложений: **8080** (UI и прокси API), **8000** (прямой доступ к API). |
+
+
+Остановка прод-стека:
+
+```bash
+docker compose -f compose.yaml -f compose.prod.yaml down
+
+```
+
+При старте backend выполняются миграции Doctrine; отключить можно переменной `SKIP_DB_MIGRATIONS=1` в сервисе backend (не рекомендуется без ручного прогона миграций). Для продакшена задайте сильный `**APP_SECRET**` и надёжные `**POSTGRES_***` через переменные окружения или `.env` на сервере (не коммитьте секреты).
+
+После старта прод-стека: UI — **[http://127.0.0.1:8080](http://127.0.0.1:8080)** (например `/shops/1/growth/telegram`). Запросы к `/shops/{id}/telegram/...` и `/shops/{id}/orders` с порта 8080 проксируются nginx фронта в **backend**. Прямой доступ к Symfony — **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
+
+Образы: [docker/backend/](docker/backend/), [docker/frontend/](docker/frontend/).
 
 ## Фронтенд
 
@@ -22,13 +44,9 @@ Backend на Symfony 8 и фронтенд в **`frontend/`** (Vite + React + Ty
 
 ## Переменные окружения
 
-- **`DATABASE_URL`** — подключение Doctrine к PostgreSQL; переопределения без коммита — в `.env.local`.
-- **`TELEGRAM_USE_REAL_API`** — переключение режима отправки в Telegram:
+- `**DATABASE_URL`** — подключение Doctrine к PostgreSQL; переопределения без коммита — в `.env.local`.
+- `**TELEGRAM_USE_REAL_API`** — переключение режима отправки в Telegram:
   - `false` (по умолчанию) — мок без обращения к сети (удобно для локальной разработки и тестов);
   - `true` — реальные вызовы Bot API через `App\Telegram\HttpTelegramClient`.
 
 Параметр контейнера: `telegram.use_real_api` (см. [config/services.yaml](config/services.yaml)).
-
-## Качество кода
-
-В репозитории не зафиксированы отдельные конфигурации PHPStan или PHP CS Fixer; полезная проверка на текущем этапе — `./vendor/bin/phpunit`. При необходимости инструменты статического анализа и стиля можно добавить отдельно.
