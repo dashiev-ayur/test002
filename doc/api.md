@@ -8,6 +8,8 @@
 
 Для запросов с другого origin настроен CORS на префикс `/shops/…` (см. `CORS_ALLOW_ORIGIN` в `.env`). Поддерживаются методы `GET`, `POST`, `OPTIONS`.
 
+Клиентский экран настроек интеграции — каталог **`frontend/`** (стек и порядок работ по UI — [Frontend.md](./Frontend.md)).
+
 ---
 
 ## POST `/shops/{shopId}/telegram/connect`

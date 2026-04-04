@@ -64,7 +64,8 @@ php bin/console dbal:run-sql "SELECT 1"
 
 1. `docker compose up -d`
 2. `symfony server:start` (второй терминал)
-3. После работы: остановить сервер Symfony, при желании `docker compose stop`.
+3. При работе с UI: в каталоге `frontend/` выполнить `npm install` (один раз после клонирования), затем `npm run dev` (ещё один терминал). Если фронт и API на разных origin, задайте `VITE_API_BASE_URL` в `frontend/.env` (см. `frontend/.env.example`). Подробности — в [Frontend.md](./Frontend.md).
+4. После работы: остановить серверы, при желании `docker compose stop`.
 
 ## Переменные окружения
 
