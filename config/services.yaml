@@ -20,5 +20,12 @@ services:
     App\:
         resource: '../src/'
 
+    App\Telegram\TelegramClientFactory:
+        arguments:
+            $useRealApi: '%telegram.use_real_api%'
+
+    App\Telegram\TelegramClient:
+        factory: ['@App\Telegram\TelegramClientFactory', 'create']
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

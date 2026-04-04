@@ -16,7 +16,7 @@ Backend на Symfony 8 для подключения бота магазином
 - **`DATABASE_URL`** — подключение Doctrine к PostgreSQL; переопределения без коммита — в `.env.local`.
 - **`TELEGRAM_USE_REAL_API`** — переключение режима отправки в Telegram:
   - `false` (по умолчанию) — мок без обращения к сети (удобно для локальной разработки и тестов);
-  - `true` — реальные вызовы Bot API после появления провайдера клиента в коде.
+  - `true` — реальные вызовы Bot API через `App\Telegram\HttpTelegramClient`.
 
 Параметр контейнера: `telegram.use_real_api` (см. [config/services.yaml](config/services.yaml)).
 
