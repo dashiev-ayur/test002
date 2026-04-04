@@ -74,4 +74,17 @@ class TelegramSendLogRepository extends ServiceEntityRepository
 
         return $row instanceof TelegramSendLog ? $row->getSentAt() : null;
     }
+
+    public function findOneByShopIdAndOrderId(int $shopId, int $orderId): ?TelegramSendLog
+    {
+        return $this->createQueryBuilder('l')
+            ->join('l.shop', 's')
+            ->join('l.order', 'o')
+            ->andWhere('s.id = :shopId')
+            ->andWhere('o.id = :orderId')
+            ->setParameter('shopId', $shopId)
+            ->setParameter('orderId', $orderId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
