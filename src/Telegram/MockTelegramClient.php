@@ -12,8 +12,29 @@ final class MockTelegramClient implements TelegramClient
     /** @var list<array{botToken: string, chatId: string, text: string}> */
     private array $recordedCalls = [];
 
+    private ?TelegramSendException $exceptionOnNextSend = null;
+
+    /**
+     * Следующий вызов sendMessage выбросит это исключение (однократно). Для тестов сбоя доставки.
+     */
+    public function setExceptionOnNextSend(?TelegramSendException $exception): void
+    {
+        $this->exceptionOnNextSend = $exception;
+    }
+
     public function sendMessage(string $botToken, string $chatId, string $text): void
     {
+        if ($this->exceptionOnNextSend !== null) {
+            $toThrow = $this->exceptionOnNextSend;
+            $this->exceptionOnNextSend = null;
+            $this->recordedCalls[] = [
+                'botToken' => $botToken,
+                'chatId' => $chatId,
+                'text' => $text,
+            ];
+            throw $toThrow;
+        }
+
         $this->recordedCalls[] = [
             'botToken' => $botToken,
             'chatId' => $chatId,
@@ -32,5 +53,6 @@ final class MockTelegramClient implements TelegramClient
     public function resetRecordedCalls(): void
     {
         $this->recordedCalls = [];
+        $this->exceptionOnNextSend = null;
     }
 }
