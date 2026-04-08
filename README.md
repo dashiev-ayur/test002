@@ -50,3 +50,17 @@ docker compose -f compose.yaml -f compose.prod.yaml down
   - `true` — реальные вызовы Bot API через `App\Telegram\HttpTelegramClient`.
 
 Параметр контейнера: `telegram.use_real_api` (см. [config/services.yaml](config/services.yaml)).
+
+## Скриншоты
+
+Экран настроек Telegram для магазина (токен, chat_id, статус интеграции):
+
+![Экран настроек интеграции Telegram](screen001.png)
+
+Создание заказа через API и ответ с `notificationStatus`:
+
+![POST /shops/1/orders: запрос и ответ 201 Created](screen002.png)
+
+Уведомление о новом заказе в Telegram:
+
+![Сообщение бота о новом заказе](screen003.png)
