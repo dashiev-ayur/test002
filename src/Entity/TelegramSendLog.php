@@ -9,13 +9,9 @@ use App\Repository\TelegramSendLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TelegramSendLogRepository::class)]
-#[ORM\Table(
-    name: 'telegram_send_log',
-    indexes: [
-        new ORM\Index(name: 'idx_telegram_send_log_shop_id', columns: ['shop_id']),
-        new ORM\Index(name: 'idx_telegram_send_log_order_id', columns: ['order_id']),
-    ],
-)]
+#[ORM\Table(name: 'telegram_send_log')]
+#[ORM\Index(name: 'idx_telegram_send_log_shop_id', columns: ['shop_id'])]
+#[ORM\Index(name: 'idx_telegram_send_log_order_id', columns: ['order_id'])]
 #[ORM\UniqueConstraint(name: 'telegram_send_log_shop_order_unique', columns: ['shop_id', 'order_id'])]
 #[ORM\HasLifecycleCallbacks]
 class TelegramSendLog

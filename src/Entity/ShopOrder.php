@@ -11,10 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Заказ магазина. Имя класса не Order — зарезервировано в DQL.
  */
 #[ORM\Entity(repositoryClass: ShopOrderRepository::class)]
-#[ORM\Table(
-    name: 'orders',
-    indexes: [new ORM\Index(name: 'idx_orders_shop_id', columns: ['shop_id'])],
-)]
+#[ORM\Table(name: 'orders')]
+#[ORM\Index(name: 'idx_orders_shop_id', columns: ['shop_id'])]
 #[ORM\HasLifecycleCallbacks]
 class ShopOrder
 {

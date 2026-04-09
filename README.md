@@ -64,3 +64,22 @@ docker compose -f compose.yaml -f compose.prod.yaml down
 Уведомление о новом заказе в Telegram:
 
 ![Сообщение бота о новом заказе](screen003.png)
+
+## Тесты (backend)
+
+Интеграционные тесты — PHPUnit, каталог [tests/](tests/), конфигурация [phpunit.dist.xml](phpunit.dist.xml). Нужны PHP и зависимости из `composer.json` (локально — как минимум **PHP ≥ 8.4**).
+
+1. Убедитесь, что PostgreSQL доступен с хоста (обычно `docker compose up -d` из быстрого старта).
+2. Для окружения `test` к имени базы из `DATABASE_URL` Symfony добавляет суффикс **`_test`** (см. [config/packages/doctrine.yaml](config/packages/doctrine.yaml)), например `postgre` → `postgre_test`. Один раз создайте эту базу и накатите миграции:
+
+   ```bash
+   APP_ENV=test php bin/console doctrine:database:create --if-not-exists
+   APP_ENV=test php bin/console doctrine:migrations:migrate --no-interaction
+   ```
+
+3. В **`.env.test`** для стабильного прогона без обращений к Telegram задайте **`TELEGRAM_USE_REAL_API=false`** (иначе возможны таймауты на вызовах Bot API).
+4. Из корня репозитория:
+
+   ```bash
+   php bin/phpunit
+   ```

@@ -148,7 +148,6 @@ final class Phase7ShopOrderTelegramJournalTest extends KernelTestCase
         ShopOrder $order,
     ): OrderNotificationDispatchStatus {
         $method = new ReflectionMethod(ShopOrderCreationService::class, 'dispatchTelegramIfNeeded');
-        $method->setAccessible(true);
 
         return $method->invoke($service, $shopId, $order);
     }
