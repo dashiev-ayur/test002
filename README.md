@@ -37,7 +37,7 @@ docker compose -f compose.yaml -f compose.prod.yaml down
 
 1. Установить [Node.js](https://nodejs.org/) (LTS) и использовать npm из состава Node.
 2. В каталоге проекта: `cd frontend && npm install`
-3. Если API открывается с другого origin (типично: Symfony на порту **8000**, Vite на **5173**), скопируйте `frontend/.env.example` в `frontend/.env` и задайте `VITE_API_BASE_URL` на базовый URL API (без завершающего слэша), например `http://127.0.0.1:8000`.
+3. Создайте `frontemd/.env` (Пример `frontend/.env.example`)
 4. Запуск дев-сервера: `npm run dev`. Маршрут экрана настроек Telegram совпадает с [ТЗ](doc/ТЗ.md); детали стека и структуры кода — в [doc/Frontend.md](doc/Frontend.md). Краткий отчёт по фазе 5 — [doc/Что сделано - фаза 5.md](doc/Что%20сделано%20-%20фаза%205.md).
 
 Сборка и проверка статики: `npm run build`; локальный просмотр сборки: `npm run preview`.

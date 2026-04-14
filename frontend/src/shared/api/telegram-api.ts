@@ -17,6 +17,7 @@ export async function postTelegramConnect(
   body: TelegramConnectInput,
 ): Promise<TelegramConnectResponse> {
   try {
+    console.log('body>>>>', shopId,body);
     const { data } = await api.post<TelegramConnectResponse>(
       `/shops/${shopId}/telegram/connect`,
       body,
